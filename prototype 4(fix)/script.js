@@ -1,3 +1,10 @@
+/*
+ * Event Attendance Management System
+ * Developed by Piyush Parshuram Sarnekar
+ * GitHub: https://github.com/piyushdigital
+ */
+
+
 // ========== script.js ==========
 // Phase 4: Admin Mode + Attendance Mode + Student Management
 // FIX: Attendance Mode no longer shows the student table.
@@ -822,3 +829,10 @@ function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+
+/*
+ * Event Attendance Management System
+ * Developed by Piyush Parshuram Sarnekar
+ * GitHub: https://github.com/piyushdigital
+ */

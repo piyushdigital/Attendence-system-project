@@ -1,3 +1,9 @@
+/*
+ * Event Attendance Management System
+ * Developed by Piyush Parshuram Sarnekar
+ * GitHub: https://github.com/piyushdigital
+ */
+
 // ============================================================
 // script.js – Event Attendance System (Phase 1)
 // ============================================================
@@ -242,3 +248,9 @@ init();
  */
 
 // End of script.js
+
+/*
+ * Event Attendance Management System
+ * Developed by Piyush Parshuram Sarnekar
+ * GitHub: https://github.com/piyushdigital
+ */

@@ -1,3 +1,11 @@
+/*
+ * Event Attendance Management System
+ * Developed by Piyush Parshuram Sarnekar
+ * GitHub: https://github.com/piyushdigital
+ */
+
+
+
 // ========== script.js ==========
 // Phase 3: Added localStorage persistence and reset functionality.
 
@@ -325,4 +333,11 @@ init();
  * - On page load, init() calls loadAttendance() before rendering the table and stats.
  * - The reset button is styled and placed in the stats header with a confirmation dialog.
  * - All existing Phase 1 & 2 functionality remains intact.
+ */
+
+
+/*
+ * Event Attendance Management System
+ * Developed by Piyush Parshuram Sarnekar
+ * GitHub: https://github.com/piyushdigital
  */

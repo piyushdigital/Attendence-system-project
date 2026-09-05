@@ -1,3 +1,11 @@
+/*
+ * Event Attendance Management System
+ * Developed by Piyush Parshuram Sarnekar
+ * GitHub: https://github.com/piyushdigital
+ */
+
+
+
 // ========== script.js ==========
 // Phase 6B: Multi-Event Management
 // All operations are scoped to the currently selected event.
@@ -1506,3 +1514,10 @@ function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+
+/*
+ * Event Attendance Management System
+ * Developed by Piyush Parshuram Sarnekar
+ * GitHub: https://github.com/piyushdigital
+ */

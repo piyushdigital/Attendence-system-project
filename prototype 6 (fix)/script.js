@@ -1,3 +1,10 @@
+/*
+ * Event Attendance Management System
+ * Developed by Piyush Parshuram Sarnekar
+ * GitHub: https://github.com/piyushdigital
+ */
+
+
 // ========== script.js ==========
 // Phase 6A: Redesigned Attendance Mode for fast event check-in.
 // FIX: Success state remains visible; no auto-hide; input cleared and focused.
@@ -1069,3 +1076,10 @@ function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+
+/*
+ * Event Attendance Management System
+ * Developed by Piyush Parshuram Sarnekar
+ * GitHub: https://github.com/piyushdigital
+ */

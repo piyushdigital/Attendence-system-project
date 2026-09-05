@@ -1,3 +1,9 @@
+/*
+ * Event Attendance Management System
+ * Developed by Piyush Parshuram Sarnekar
+ * GitHub: https://github.com/piyushdigital
+ */
+
 // ========== script.js ==========
 // (All previous functionality is kept; new functions for the table are added.)
 
@@ -254,4 +260,11 @@ init();
  * - The filter works on Roll Number and Name (case‑insensitive substring).
  * - All existing Phase 1 functionality (search, card, stats, duplicate prevention)
  *   remains unchanged and works alongside the new table.
+ */
+
+
+/*
+ * Event Attendance Management System
+ * Developed by Piyush Parshuram Sarnekar
+ * GitHub: https://github.com/piyushdigital
  */

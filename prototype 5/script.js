@@ -1,3 +1,9 @@
+/*
+ * Event Attendance Management System
+ * Developed by Piyush Parshuram Sarnekar
+ * GitHub: https://github.com/piyushdigital
+ */
+
 // ========== script.js ==========
 // Phase 5: Added Attendance Records with filtering, sorting, export, and print.
 
@@ -1001,3 +1007,11 @@ function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+
+
+/*
+ * Event Attendance Management System
+ * Developed by Piyush Parshuram Sarnekar
+ * GitHub: https://github.com/piyushdigital
+ */
