@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Event Attendance System</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js">
+    </script>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <div class="app-wrapper">
+        <!-- HEADER -->
+        <header class="app-header">
+            <h1>🎯 Event Attendance System</h1>
+            <p class="subtitle">Mark attendance for registered students</p>
+        </header>
+
+        <!-- MODE SELECTOR -->
+        <div class="mode-selector">
+            <button id="adminModeBtn" class="mode-btn" data-mode="admin">👨‍💼 Admin Mode</button>
+            <button id="attendanceModeBtn" class="mode-btn active" data-mode="attendance">🎫 Attendance Mode</button>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- ATTENDANCE MODE CONTENT                                       -->
+        <!-- ============================================================ -->
+        <div id="attendanceModeContent" class="mode-content">
+
+            <!-- CURRENT EVENT DISPLAY (Attendance Mode) -->
+            <div id="attendanceEventDisplay" class="current-event-display">
+                <div class="event-label">📌 Current Event</div>
+                <div class="event-name" id="attendanceEventName">—</div>
+                <div class="event-details" id="attendanceEventDetails"></div>
+            </div>
+
+            <!-- ATTENDANCE MODE HEADING -->
+            <div class="attendance-mode-heading">
+                <h2>🎫 Attendance Mode</h2>
+                <p class="mode-desc">Enter roll number → verify student → confirm attendance</p>
+            </div>
+
+            <!-- SEARCH SECTION -->
+            <section class="search-section">
+                <div class="search-box">
+                    <label for="rollInput">Enter Roll Number</label>
+                    <div class="search-row">
+                        <input type="text" id="rollInput" placeholder="e.g. 101" autocomplete="off" />
+                        <button id="searchBtn">Search</button>
+                    </div>
+                </div>
+                <div id="searchFeedback" class="search-feedback"></div>
+            </section>
+
+            <!-- STUDENT VERIFICATION CARD -->
+            <section id="studentCard" class="student-card hidden">
+                <div class="card-header">
+                    <h2>🔍 Verify Student</h2>
+                    <span id="statusBadge" class="badge">Absent</span>
+                </div>
+                <div class="card-body">
+                    <div class="student-name-display" id="studentNameDisplay">—</div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="label">Roll Number</span>
+                            <span id="studentRoll" class="value">—</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Department</span>
+                            <span id="studentDept" class="value">—</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Year</span>
+                            <span id="studentYear" class="value">—</span>
+                        </div>
+                        <div class="info-item full-width">
+                            <span class="label">Attendance Time</span>
+                            <span id="studentTime" class="value">Not marked</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="attendanceActions" class="card-actions">
+                    <button id="confirmMarkBtn" class="btn-confirm">✅ Confirm &amp; Mark Present</button>
+                    <button id="cancelMarkBtn" class="btn-cancel">❌ Cancel</button>
+                </div>
+                <div id="attendanceMessage" class="attendance-message"></div>
+            </section>
+
+            <!-- LIVE STATISTICS (compact) -->
+            <section class="stats-section compact-stats">
+                <h2>📊 Attendance</h2>
+                <div class="stats-grid">
+                    <div class="stat-card"><span class="stat-number" id="totalCount">0</span><span class="stat-label">Registered</span></div>
+                    <div class="stat-card present"><span class="stat-number" id="presentCount">0</span><span class="stat-label">Present</span></div>
+                    <div class="stat-card absent"><span class="stat-number" id="absentCount">0</span><span class="stat-label">Absent</span></div>
+                    <div class="stat-card percentage"><span class="stat-number" id="percentCount">0%</span><span class="stat-label">Attendance</span></div>
+                </div>
+            </section>
+        </div>
+        <!-- END ATTENDANCE MODE CONTENT -->
+
+        <!-- ============================================================ -->
+        <!-- ADMIN MODE CONTENT                                            -->
+        <!-- ============================================================ -->
+        <div id="adminModeContent" class="mode-content" style="display:none;">
+
+            <!-- ===== EVENT MANAGEMENT ===== -->
+            <section class="event-management">
+                <h2>🎪 Event Management</h2>
+
+                <!-- Current Event Display -->
+                <div id="adminCurrentEventDisplay" class="current-event-display">
+                    <div class="event-label">📌 Current Event</div>
+                    <div class="event-name" id="adminEventName">—</div>
+                    <div class="event-details" id="adminEventDetails"></div>
+                </div>
+
+                <!-- Create Event Form -->
+                <div class="create-event-section">
+                    <h3>➕ Create New Event</h3>
+                    <div class="create-event-form">
+                        <div class="form-row">
+                            <div class="form-group required">
+                                <label for="eventNameInput">Event Name *</label>
+                                <input type="text" id="eventNameInput" placeholder="e.g. Robotics Workshop 2026" />
+                            </div>
+                            <div class="form-group">
+                                <label for="eventVenueInput">Venue</label>
+                                <input type="text" id="eventVenueInput" placeholder="e.g. Main Auditorium" />
+                            </div>
+                            <div class="form-group">
+                                <label for="eventDateInput">Date</label>
+                                <input type="date" id="eventDateInput" />
+                            </div>
+                            <div class="form-group">
+                                <label for="eventStartTimeInput">Start Time</label>
+                                <input type="time" id="eventStartTimeInput" />
+                            </div>
+                            <div class="form-group">
+                                <label for="eventEndTimeInput">End Time</label>
+                                <input type="time" id="eventEndTimeInput" />
+                            </div>
+                            <div class="form-group">
+                                <label for="eventOrganizerInput">Organizer / Club</label>
+                                <input type="text" id="eventOrganizerInput" placeholder="e.g. Robotics Club" />
+                            </div>
+                            <div class="form-group" style="flex:2;">
+                                <label for="eventDescriptionInput">Description</label>
+                                <input type="text" id="eventDescriptionInput" placeholder="Optional description..." />
+                            </div>
+                            <div class="form-group" style="justify-content:flex-end;">
+                                <button id="createEventBtn" class="btn-admin btn-success">Create Event</button>
+                            </div>
+                        </div>
+                        <div id="createEventFeedback" class="create-event-feedback"></div>
+                    </div>
+                </div>
+
+                <!-- Event List -->
+                <div class="event-list-section">
+                    <h3>📋 Existing Events</h3>
+                    <div id="eventListContainer" class="event-list">
+                        <!-- Event cards will be rendered here -->
+                    </div>
+                </div>
+            </section>
+            <!-- END EVENT MANAGEMENT -->
+
+            <!-- ===== EXISTING ADMIN CONTROLS (unchanged) ===== -->
+            <!-- SEARCH SECTION -->
+            <section class="search-section">
+                <div class="search-box">
+                    <label for="rollInputAdmin">Enter Roll Number</label>
+                    <div class="search-row">
+                        <input type="text" id="rollInputAdmin" placeholder="e.g. 101" autocomplete="off" />
+                        <button id="searchBtnAdmin">Search</button>
+                    </div>
+                </div>
+                <div id="searchFeedbackAdmin" class="search-feedback"></div>
+            </section>
+
+            <!-- STUDENT CARD (admin view) -->
+            <section id="studentCardAdmin" class="student-card hidden">
+                <div class="card-header">
+                    <h2>Student Information</h2>
+                    <span id="statusBadgeAdmin" class="badge">Absent</span>
+                </div>
+                <div class="card-body">
+                    <div class="info-grid">
+                        <div class="info-item"><span class="label">Name</span><span id="studentNameAdmin" class="value">—</span></div>
+                        <div class="info-item"><span class="label">Roll Number</span><span id="studentRollAdmin" class="value">—</span></div>
+                        <div class="info-item"><span class="label">Department</span><span id="studentDeptAdmin" class="value">—</span></div>
+                        <div class="info-item"><span class="label">Year</span><span id="studentYearAdmin" class="value">—</span></div>
+                        <div class="info-item full-width"><span class="label">Attendance Time</span><span id="studentTimeAdmin" class="value">Not marked</span></div>
+                    </div>
+                </div>
+                <div id="attendanceMessageAdmin" class="attendance-message"></div>
+            </section>
+
+            <!-- ADMIN CONTROLS -->
+            <section class="admin-controls">
+                <h2>🛠️ Student Management</h2>
+
+                <div class="admin-section">
+                    <h3>📥 Import Students</h3>
+                    <div class="import-row">
+                        <div class="import-group">
+                            <label for="csvFileInput">CSV File:</label>
+                            <input type="file" id="csvFileInput" accept=".csv" />
+                            <button id="importCsvBtn" class="btn-admin">Import CSV</button>
+                        </div>
+                        <div class="import-group">
+                            <label for="excelFileInput">Excel File (.xlsx, .xls):</label>
+                            <input type="file" id="excelFileInput" accept=".xlsx,.xls" />
+                            <button id="importExcelBtn" class="btn-admin">Import Excel</button>
+                        </div>
+                    </div>
+                    <div id="importFeedback" class="import-feedback"></div>
+                </div>
+
+                <div class="admin-section">
+                    <h3>➕ Add Student Manually</h3>
+                    <div class="add-student-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="addRollNo">Roll Number</label>
+                                <input type="text" id="addRollNo" placeholder="e.g. 104" />
+                            </div>
+                            <div class="form-group">
+                                <label for="addName">Name</label>
+                                <input type="text" id="addName" placeholder="e.g. Aditya Sharma" />
+                            </div>
+                            <div class="form-group">
+                                <label for="addDept">Department</label>
+                                <input type="text" id="addDept" placeholder="e.g. IT" />
+                            </div>
+                            <div class="form-group">
+                                <label for="addYear">Year</label>
+                                <input type="text" id="addYear" placeholder="e.g. Final Year" />
+                            </div>
+                            <div class="form-group" style="justify-content:flex-end;">
+                                <button id="addStudentBtn" class="btn-admin">Add Student</button>
+                            </div>
+                        </div>
+                        <div id="addFeedback" class="add-feedback"></div>
+                    </div>
+                </div>
+
+                <div class="admin-section danger-zone">
+                    <h3>⚠️ Danger Zone</h3>
+                    <div class="danger-actions">
+                        <button id="resetAttendanceAdminBtn" class="btn-danger">🔄 Reset All Attendance</button>
+                        <button id="clearStudentsBtn" class="btn-danger">🗑️ Clear Student List</button>
+                    </div>
+                    <div id="dangerFeedback" class="danger-feedback"></div>
+                </div>
+            </section>
+
+            <!-- STATISTICS (admin) -->
+            <section class="stats-section">
+                <h2>📊 Attendance Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card"><span class="stat-number" id="totalCountAdmin">0</span><span class="stat-label">Total Registered</span></div>
+                    <div class="stat-card present"><span class="stat-number" id="presentCountAdmin">0</span><span class="stat-label">Present</span></div>
+                    <div class="stat-card absent"><span class="stat-number" id="absentCountAdmin">0</span><span class="stat-label">Absent</span></div>
+                    <div class="stat-card percentage"><span class="stat-number" id="percentCountAdmin">0%</span><span class="stat-label">Attendance %</span></div>
+                </div>
+            </section>
+
+            <!-- REGISTERED STUDENTS TABLE -->
+            <section class="table-section">
+                <h2>📋 Registered Students</h2>
+                <div class="table-filter">
+                    <input type="text" id="tableFilterAdmin" placeholder="Filter by Roll Number or Name..." aria-label="Filter students" />
+                </div>
+                <div id="studentTableContainerAdmin"></div>
+            </section>
+
+            <!-- ATTENDANCE RECORDS -->
+            <section class="records-section" id="attendanceRecordsSection">
+                <h2>📊 Attendance Records</h2>
+                <div class="records-summary" id="recordsSummary">
+                    <span>Total Registered: <strong id="recordsTotal">0</strong></span>
+                    <span>Present: <strong id="recordsPresent">0</strong></span>
+                    <span>Absent: <strong id="recordsAbsent">0</strong></span>
+                    <span>Attendance Percentage: <strong id="recordsPercent">0%</strong></span>
+                </div>
+                <div class="records-controls">
+                    <div class="records-filters">
+                        <input type="text" id="recordsSearch" placeholder="Search by Roll Number or Name..." />
+                        <select id="recordsStatusFilter">
+                            <option value="all">All</option>
+                            <option value="present">Present</option>
+                            <option value="absent">Absent</option>
+                        </select>
+                    </div>
+                    <div class="records-actions">
+                        <button id="exportCsvBtn" class="btn-admin btn-success">📥 Export Attendance</button>
+                        <button id="printReportBtn" class="btn-admin">🖨️ Print Report</button>
+                    </div>
+                </div>
+                <div id="recordsTableContainer" class="records-table-wrapper"></div>
+            </section>
+        </div>
+        <!-- END ADMIN MODE CONTENT -->
+
+        <!-- FOOTER -->
+        <footer class="app-footer">
+            <p>Phase 6B · Multi-Event Management</p>
+        </footer>
+    </div>
+
+    <!-- EDIT STUDENT MODAL -->
+    <div id="editModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3>✏️ Edit Student</h3>
+            <div class="modal-form">
+                <div class="form-group"><label for="editRollNo">Roll Number</label><input type="text" id="editRollNo" /></div>
+                <div class="form-group"><label for="editName">Name</label><input type="text" id="editName" /></div>
+                <div class="form-group"><label for="editDept">Department</label><input type="text" id="editDept" /></div>
+                <div class="form-group"><label for="editYear">Year</label><input type="text" id="editYear" /></div>
+            </div>
+            <div class="modal-actions">
+                <button id="editSaveBtn" class="btn-confirm">💾 Save</button>
+                <button id="editCancelBtn" class="btn-cancel">Cancel</button>
+            </div>
+            <div id="editFeedback" class="edit-feedback"></div>
+        </div>
+    </div>
+
+    <!-- EDIT EVENT MODAL -->
+    <div id="editEventModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3>✏️ Edit Event</h3>
+            <div class="modal-form">
+                <div class="form-group required"><label for="editEventName">Event Name *</label><input type="text" id="editEventName" /></div>
+                <div class="form-group"><label for="editEventVenue">Venue</label><input type="text" id="editEventVenue" /></div>
+                <div class="form-group"><label for="editEventDate">Date</label><input type="date" id="editEventDate" /></div>
+                <div class="form-group"><label for="editEventStartTime">Start Time</label><input type="time" id="editEventStartTime" /></div>
+                <div class="form-group"><label for="editEventEndTime">End Time</label><input type="time" id="editEventEndTime" /></div>
+                <div class="form-group"><label for="editEventOrganizer">Organizer / Club</label><input type="text" id="editEventOrganizer" /></div>
+                <div class="form-group"><label for="editEventDescription">Description</label><input type="text" id="editEventDescription" /></div>
+            </div>
+            <div class="modal-actions">
+                <button id="editEventSaveBtn" class="btn-confirm">💾 Save Changes</button>
+                <button id="editEventCancelBtn" class="btn-cancel">Cancel</button>
+            </div>
+            <div id="editEventFeedback" class="edit-feedback"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,439 @@
+/* style.css – Event Attendance System */
+/* ============================================================ */
+
+/* ----- Reset & Base ----- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+    background: #f4f7fc;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: #1e293b;
+}
+
+/* ----- App Container ----- */
+.app-wrapper {
+    max-width: 900px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 28px;
+    box-shadow: 0 20px 60px rgba(0, 20, 40, 0.10);
+    padding: 32px 36px 28px;
+    transition: box-shadow 0.2s;
+}
+
+/* ----- Header ----- */
+.app-header {
+    text-align: center;
+    margin-bottom: 28px;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 20px;
+}
+
+.app-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.app-header .subtitle {
+    font-size: 0.95rem;
+    color: #64748b;
+    margin-top: 4px;
+    font-weight: 400;
+}
+
+/* ----- Search Section ----- */
+.search-section {
+    margin-bottom: 28px;
+}
+
+.search-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.search-box label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #334155;
+    letter-spacing: 0.3px;
+}
+
+.search-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+#rollInput {
+    flex: 1;
+    min-width: 180px;
+    padding: 12px 18px;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    font-size: 1rem;
+    background: #fafcff;
+    transition: border-color 0.25s, box-shadow 0.2s;
+    outline: none;
+    color: #0f172a;
+}
+
+#rollInput:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+    background: #ffffff;
+}
+
+#rollInput::placeholder {
+    color: #94a3b8;
+    font-weight: 400;
+}
+
+#searchBtn {
+    padding: 12px 28px;
+    background: #4f46e5;
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+#searchBtn:hover {
+    background: #4338ca;
+}
+
+#searchBtn:active {
+    transform: scale(0.97);
+}
+
+.search-feedback {
+    margin-top: 10px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    min-height: 1.6em;
+    color: #475569;
+}
+
+.search-feedback.error {
+    color: #dc2626;
+}
+
+.search-feedback.success {
+    color: #16a34a;
+}
+
+/* ----- Student Card ----- */
+.student-card {
+    background: #f8fafc;
+    border-radius: 20px;
+    padding: 24px 28px 20px;
+    margin-bottom: 32px;
+    border: 1px solid #e9edf4;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.student-card.hidden {
+    display: none;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.card-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0;
+}
+
+.badge {
+    padding: 6px 18px;
+    border-radius: 40px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    background: #e2e8f0;
+    color: #475569;
+}
+
+.badge.present {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.badge.absent {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.card-body {
+    margin-bottom: 18px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 28px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.info-item.full-width {
+    grid-column: 1 / -1;
+}
+
+.info-item .label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #64748b;
+}
+
+.info-item .value {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: #0f172a;
+    padding: 4px 0;
+}
+
+.card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    margin-top: 4px;
+}
+
+.btn-primary {
+    padding: 12px 32px;
+    background: #22c55e;
+    color: #fff;
+    border: none;
+    border-radius: 40px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary:hover {
+    background: #16a34a;
+    box-shadow: 0 6px 18px rgba(34, 197, 94, 0.30);
+}
+
+.btn-primary:active {
+    transform: scale(0.97);
+}
+
+.btn-primary:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.7;
+}
+
+.attendance-message {
+    margin-top: 14px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    min-height: 1.8em;
+    color: #0f172a;
+    padding: 8px 14px;
+    border-radius: 10px;
+    background: #f1f5f9;
+}
+
+.attendance-message.success {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.attendance-message.info {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.attendance-message.warning {
+    background: #fef9c3;
+    color: #a16207;
+}
+
+/* ----- Statistics ----- */
+.stats-section {
+    margin-top: 8px;
+    border-top: 2px solid #f1f5f9;
+    padding-top: 24px;
+}
+
+.stats-section h2 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 16px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.stat-card {
+    background: #f8fafc;
+    border-radius: 16px;
+    padding: 16px 12px;
+    text-align: center;
+    border: 1px solid #e9edf4;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.stat-card:hover {
+    background: #f1f5f9;
+    transform: translateY(-2px);
+}
+
+.stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.2;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.stat-card.present .stat-number {
+    color: #16a34a;
+}
+
+.stat-card.absent .stat-number {
+    color: #dc2626;
+}
+
+.stat-card.percentage .stat-number {
+    color: #4f46e5;
+}
+
+/* ----- Footer ----- */
+.app-footer {
+    text-align: center;
+    margin-top: 26px;
+    padding-top: 16px;
+    border-top: 1px solid #f1f5f9;
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
+
+/* ----- Responsive ----- */
+@media (max-width: 700px) {
+    .app-wrapper {
+        padding: 24px 18px 20px;
+    }
+
+    .app-header h1 {
+        font-size: 1.6rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .info-item.full-width {
+        grid-column: 1;
+    }
+
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .search-row {
+        flex-direction: column;
+    }
+
+    #searchBtn {
+        justify-content: center;
+    }
+
+    .btn-primary {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 450px) {
+    .app-wrapper {
+        padding: 16px 12px;
+        border-radius: 20px;
+    }
+
+    .app-header h1 {
+        font-size: 1.3rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .stat-number {
+        font-size: 1.5rem;
+    }
+
+    .student-card {
+        padding: 16px;
+    }
+
+    #rollInput {
+        min-width: 140px;
+    }
+}

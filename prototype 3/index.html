@@ -1,0 +1,127 @@
+<!-- ========== index.html ========== -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Event Attendance System</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <div class="app-wrapper">
+        <!-- HEADER -->
+        <header class="app-header">
+            <h1>🎯 Event Attendance System</h1>
+            <p class="subtitle">Mark attendance for registered students</p>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main class="app-main">
+
+            <!-- SEARCH SECTION -->
+            <section class="search-section">
+                <div class="search-box">
+                    <label for="rollInput">Enter Roll Number</label>
+                    <div class="search-row">
+                        <input
+                        type="text"
+                        id="rollInput"
+                        placeholder="e.g. 101"
+                        autocomplete="off"
+                        />
+                        <button id="searchBtn">Search</button>
+                    </div>
+                </div>
+                <div id="searchFeedback" class="search-feedback"></div>
+            </section>
+
+            <!-- STUDENT CARD -->
+            <section id="studentCard" class="student-card hidden">
+                <div class="card-header">
+                    <h2>Student Information</h2>
+                    <span id="statusBadge" class="badge">Absent</span>
+                </div>
+                <div class="card-body">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="label">Name</span>
+                            <span id="studentName" class="value">—</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Roll Number</span>
+                            <span id="studentRoll" class="value">—</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Department</span>
+                            <span id="studentDept" class="value">—</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Year</span>
+                            <span id="studentYear" class="value">—</span>
+                        </div>
+                        <div class="info-item full-width">
+                            <span class="label">Attendance Time</span>
+                            <span id="studentTime" class="value">Not marked</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button id="markPresentBtn" class="btn-primary">✅ Mark Present</button>
+                </div>
+                <div id="attendanceMessage" class="attendance-message"></div>
+            </section>
+
+            <!-- STATISTICS + RESET BUTTON -->
+            <section class="stats-section">
+                <div class="stats-header">
+                    <h2>📊 Attendance Statistics</h2>
+                    <button id="resetBtn" class="btn-reset">🔄 Reset Attendance</button>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-number" id="totalCount">0</span>
+                        <span class="stat-label">Total Registered</span>
+                    </div>
+                    <div class="stat-card present">
+                        <span class="stat-number" id="presentCount">0</span>
+                        <span class="stat-label">Present</span>
+                    </div>
+                    <div class="stat-card absent">
+                        <span class="stat-number" id="absentCount">0</span>
+                        <span class="stat-label">Absent</span>
+                    </div>
+                    <div class="stat-card percentage">
+                        <span class="stat-number" id="percentCount">0%</span>
+                        <span class="stat-label">Attendance %</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- REGISTERED STUDENTS TABLE -->
+            <section class="table-section">
+                <h2>📋 Registered Students</h2>
+                <div class="table-filter">
+                    <input
+                        type="text"
+                        id="tableFilter"
+                        placeholder="Filter by Roll Number or Name..."
+                        aria-label="Filter students"
+                    />
+                </div>
+                <div id="studentTableContainer">
+                    <!-- Table will be rendered by JavaScript -->
+                </div>
+            </section>
+
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="app-footer">
+            <p>Phase 3 · Persistent Storage</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

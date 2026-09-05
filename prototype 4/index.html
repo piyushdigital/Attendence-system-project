@@ -1,0 +1,249 @@
+<!-- ========== index.html ========== -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Event Attendance System</title>
+    <!-- SheetJS for Excel import -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js">
+    </script>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <div class="app-wrapper">
+        <!-- HEADER -->
+        <header class="app-header">
+            <h1>🎯 Event Attendance System</h1>
+            <p class="subtitle">Mark attendance for registered students</p>
+        </header>
+
+        <!-- MODE SELECTOR -->
+        <div class="mode-selector">
+            <button id="adminModeBtn" class="mode-btn active" data-mode="admin">👨‍💼 Admin Mode</button>
+            <button id="attendanceModeBtn" class="mode-btn" data-mode="attendance">🎫 Attendance Mode</button>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- ATTENDANCE MODE CONTENT -->
+        <!-- ============================================================ -->
+        <div id="attendanceModeContent" class="mode-content">
+            <!-- SEARCH SECTION -->
+            <section class="search-section">
+                <div class="search-box">
+                    <label for="rollInput">Enter Roll Number</label>
+                    <div class="search-row">
+                        <input type="text" id="rollInput" placeholder="e.g. 101" autocomplete="off" />
+                        <button id="searchBtn">Search</button>
+                    </div>
+                </div>
+                <div id="searchFeedback" class="search-feedback"></div>
+            </section>
+
+            <!-- STUDENT CARD with Confirm/Cancel -->
+            <section id="studentCard" class="student-card hidden">
+                <div class="card-header">
+                    <h2>Student Information</h2>
+                    <span id="statusBadge" class="badge">Absent</span>
+                </div>
+                <div class="card-body">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="label">Name</span>
+                            <span id="studentName" class="value">—</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Roll Number</span>
+                            <span id="studentRoll" class="value">—</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Department</span>
+                            <span id="studentDept" class="value">—</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Year</span>
+                            <span id="studentYear" class="value">—</span>
+                        </div>
+                        <div class="info-item full-width">
+                            <span class="label">Attendance Time</span>
+                            <span id="studentTime" class="value">Not marked</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Attendance Mode: Confirm / Cancel buttons -->
+                <div id="attendanceActions" class="card-actions">
+                    <button id="confirmMarkBtn" class="btn-confirm">✅ Confirm Student & Mark Present</button>
+                    <button id="cancelMarkBtn" class="btn-cancel">❌ Cancel</button>
+                </div>
+                <div id="attendanceMessage" class="attendance-message"></div>
+            </section>
+
+            <!-- STATISTICS -->
+            <section class="stats-section">
+                <h2>📊 Attendance Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card"><span class="stat-number" id="totalCount">0</span><span class="stat-label">Total Registered</span></div>
+                    <div class="stat-card present"><span class="stat-number" id="presentCount">0</span><span class="stat-label">Present</span></div>
+                    <div class="stat-card absent"><span class="stat-number" id="absentCount">0</span><span class="stat-label">Absent</span></div>
+                    <div class="stat-card percentage"><span class="stat-number" id="percentCount">0%</span><span class="stat-label">Attendance %</span></div>
+                </div>
+            </section>
+
+            <!-- REGISTERED STUDENTS TABLE (read-only in Attendance Mode) -->
+            <section class="table-section">
+                <h2>📋 Registered Students</h2>
+                <div class="table-filter">
+                    <input type="text" id="tableFilter" placeholder="Filter by Roll Number or Name..." aria-label="Filter students" />
+                </div>
+                <div id="studentTableContainer"></div>
+            </section>
+        </div>
+        <!-- END ATTENDANCE MODE CONTENT -->
+
+        <!-- ============================================================ -->
+        <!-- ADMIN MODE CONTENT -->
+        <!-- ============================================================ -->
+        <div id="adminModeContent" class="mode-content" style="display:none;">
+
+            <!-- SEARCH SECTION (reuse same search) -->
+            <section class="search-section">
+                <div class="search-box">
+                    <label for="rollInputAdmin">Enter Roll Number</label>
+                    <div class="search-row">
+                        <input type="text" id="rollInputAdmin" placeholder="e.g. 101" autocomplete="off" />
+                        <button id="searchBtnAdmin">Search</button>
+                    </div>
+                </div>
+                <div id="searchFeedbackAdmin" class="search-feedback"></div>
+            </section>
+
+            <!-- STUDENT CARD (admin view - no confirm/cancel) -->
+            <section id="studentCardAdmin" class="student-card hidden">
+                <div class="card-header">
+                    <h2>Student Information</h2>
+                    <span id="statusBadgeAdmin" class="badge">Absent</span>
+                </div>
+                <div class="card-body">
+                    <div class="info-grid">
+                        <div class="info-item"><span class="label">Name</span><span id="studentNameAdmin" class="value">—</span></div>
+                        <div class="info-item"><span class="label">Roll Number</span><span id="studentRollAdmin" class="value">—</span></div>
+                        <div class="info-item"><span class="label">Department</span><span id="studentDeptAdmin" class="value">—</span></div>
+                        <div class="info-item"><span class="label">Year</span><span id="studentYearAdmin" class="value">—</span></div>
+                        <div class="info-item full-width"><span class="label">Attendance Time</span><span id="studentTimeAdmin" class="value">Not marked</span></div>
+                    </div>
+                </div>
+                <div id="attendanceMessageAdmin" class="attendance-message"></div>
+            </section>
+
+            <!-- ADMIN CONTROLS -->
+            <section class="admin-controls">
+                <h2>🛠️ Student Management</h2>
+
+                <!-- Import Section -->
+                <div class="admin-section">
+                    <h3>📥 Import Students</h3>
+                    <div class="import-row">
+                        <div class="import-group">
+                            <label for="csvFileInput">CSV File:</label>
+                            <input type="file" id="csvFileInput" accept=".csv" />
+                            <button id="importCsvBtn" class="btn-admin">Import CSV</button>
+                        </div>
+                        <div class="import-group">
+                            <label for="excelFileInput">Excel File (.xlsx, .xls):</label>
+                            <input type="file" id="excelFileInput" accept=".xlsx,.xls" />
+                            <button id="importExcelBtn" class="btn-admin">Import Excel</button>
+                        </div>
+                    </div>
+                    <div id="importFeedback" class="import-feedback"></div>
+                </div>
+
+                <!-- Add Student Form -->
+                <div class="admin-section">
+                    <h3>➕ Add Student Manually</h3>
+                    <div class="add-student-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="addRollNo">Roll Number</label>
+                                <input type="text" id="addRollNo" placeholder="e.g. 104" />
+                            </div>
+                            <div class="form-group">
+                                <label for="addName">Name</label>
+                                <input type="text" id="addName" placeholder="e.g. Aditya Sharma" />
+                            </div>
+                            <div class="form-group">
+                                <label for="addDept">Department</label>
+                                <input type="text" id="addDept" placeholder="e.g. IT" />
+                            </div>
+                            <div class="form-group">
+                                <label for="addYear">Year</label>
+                                <input type="text" id="addYear" placeholder="e.g. Final Year" />
+                            </div>
+                            <div class="form-group" style="justify-content:flex-end;">
+                                <button id="addStudentBtn" class="btn-admin">Add Student</button>
+                            </div>
+                        </div>
+                        <div id="addFeedback" class="add-feedback"></div>
+                    </div>
+                </div>
+
+                <!-- Danger Zone -->
+                <div class="admin-section danger-zone">
+                    <h3>⚠️ Danger Zone</h3>
+                    <div class="danger-actions">
+                        <button id="resetAttendanceAdminBtn" class="btn-danger">🔄 Reset All Attendance</button>
+                        <button id="clearStudentsBtn" class="btn-danger">🗑️ Clear Student List</button>
+                    </div>
+                    <div id="dangerFeedback" class="danger-feedback"></div>
+                </div>
+            </section>
+
+            <!-- STATISTICS (shared) -->
+            <section class="stats-section">
+                <h2>📊 Attendance Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card"><span class="stat-number" id="totalCountAdmin">0</span><span class="stat-label">Total Registered</span></div>
+                    <div class="stat-card present"><span class="stat-number" id="presentCountAdmin">0</span><span class="stat-label">Present</span></div>
+                    <div class="stat-card absent"><span class="stat-number" id="absentCountAdmin">0</span><span class="stat-label">Absent</span></div>
+                    <div class="stat-card percentage"><span class="stat-number" id="percentCountAdmin">0%</span><span class="stat-label">Attendance %</span></div>
+                </div>
+            </section>
+
+            <!-- REGISTERED STUDENTS TABLE (with admin actions) -->
+            <section class="table-section">
+                <h2>📋 Registered Students</h2>
+                <div class="table-filter">
+                    <input type="text" id="tableFilterAdmin" placeholder="Filter by Roll Number or Name..." aria-label="Filter students" />
+                </div>
+                <div id="studentTableContainerAdmin"></div>
+            </section>
+        </div>
+        <!-- END ADMIN MODE CONTENT -->
+
+        <!-- FOOTER -->
+        <footer class="app-footer">
+            <p>Phase 4 · Admin + Attendance Modes</p>
+        </footer>
+    </div>
+
+    <!-- EDIT STUDENT MODAL -->
+    <div id="editModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3>✏️ Edit Student</h3>
+            <div class="modal-form">
+                <div class="form-group"><label for="editRollNo">Roll Number</label><input type="text" id="editRollNo" /></div>
+                <div class="form-group"><label for="editName">Name</label><input type="text" id="editName" /></div>
+                <div class="form-group"><label for="editDept">Department</label><input type="text" id="editDept" /></div>
+                <div class="form-group"><label for="editYear">Year</label><input type="text" id="editYear" /></div>
+            </div>
+            <div class="modal-actions">
+                <button id="editSaveBtn" class="btn-confirm">💾 Save</button>
+                <button id="editCancelBtn" class="btn-cancel">Cancel</button>
+            </div>
+            <div id="editFeedback" class="edit-feedback"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
